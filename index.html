@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой сайт</title>
+  <meta name="description" content="Личный сайт Ивана Иванова: видео, фотогалерея и контакты.">
+  <meta name="author" content="Иван Иванов">
+
+  <meta property="og:title" content="Личный сайт Ивана Иванова">
+  <meta property="og:description" content="Видео и фотогалерея Ивана.">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+  <link rel="icon" type="image/x-icon" href="icon/favicon.ico"> <link rel="manifest" href="icon/site.webmanifest">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header id="header">
+    <h1>Мой сайт — Иван Иванов</h1>
+  </header>
+
+  <main id="mainContent">   
+     
+    <div id="homeSection" class="section">
+    
+    <img src="foto/start.png" alt="Заставка" class="start-image">
+    
+    <div class="fire-blinking-effect"></div> 
+    
+    <img src="icon/candle.gif" alt="Горящая свеча" class="candle-gif"> 
+</div>
+
+
+    <div id="videoSection" class="section hidden">
+      <video id="introVideo" controls>
+        <source src="video/intro.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+      </video>
+    </div>
+
+    <div id="gallerySection" class="section hidden">
+      <div class="top-controls">
+        <button id="fsBtn" class="control-btn" title="Полноэкранный просмотр">⛶</button>
+        <button id="playBtn" class="control-btn" title="Автоматическое воспроизведение">&#9654</button>
+      </div>
+
+      <div class="gallery" id="gallery">
+        <button id="prev" class="nav-btn-gal" title="Предыдущее фото">&#10094;</button>
+        <div id="galleryBg" class="gallery-bg"></div>
+        <img id="photo" src="" alt="">
+        <button id="next" class="nav-btn-gal" title="Следующее фото">&#10095;</button>
+        <button id="infoBtn" class="info-btn" title="Показать описание">ⓘ</button>
+      </div>
+
+      <div id="descPopup">
+        <button id="closeDesc" title="Закрыть описание">✕</button>
+        <div id="descText"></div>
+      </div>
+
+      <div id="fullscreenOverlay" >
+        <button id="fsClose" title="Закрыть полноэкранный просмотр">✕</button>
+        <img id="fsImage" src="" alt="">
+      </div>
+    </div>
+  </main> 
+
+  <footer id="footer">
+  <button id="btnHome" class="nav-btn active" title="Главная">
+    <img src="icon/main.png" alt="Home">
+  </button>
+  <button id="btnVideo" class="nav-btn" title="Видео">
+    <img src="icon/video.png" alt="Video">
+  </button>
+  <button id="btnGallery" class="nav-btn" title="Галерея">
+    <img src="icon/foto.png" alt="Gallery">
+  </button>
+  <button id="btnShare" class="nav-btn" title="Поделиться">
+    <img src="icon/share.png" alt="Share">
+  </button>
+  <button id="btnQR" class="nav-btn" title="QR-код">
+    <img src="icon/qricon.png" alt="QR">
+  </button>
+</footer>
+
+
+  <!-- Модальное окно Поделиться -->
+  <div id="shareModal" class="modal hidden">
+    <div class="modal-content">
+      <button id="closeShare" class="modal-close" title="Закрыть">✕</button>
+      <h3>Поделиться</h3>
+      <p>Отправить ссылку или скопировать:</p>
+      <button id="shareNative" class="modal-btn">
+         <img src="icon/share.png" alt="Share">
+        Поделиться через системное меню</button>
+      <button id="shareCopy" class="modal-btn">🔗📋 Копировать ссылку</button>
+      <div id="shareMsg" class="share-msg"></div>
+    </div>
+  </div>
+
+  <!-- Модальное окно QR -->
+  <div id="qrModal" class="modal hidden">
+    <div class="modal-content">
+      <button id="closeQR" class="modal-close" title="Закрыть">✕</button>
+      <h3>QR-код для быстрого доступа</h3>
+      <img src="icon/qr.png" alt="QR-код" id="qrImage" style="max-width: 200px; margin-top: 10px;">
+    </div>
+  </div>
+
+  <script src="photos.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
