@@ -325,6 +325,74 @@ function checkQrImage(path) {
   im.src = path + '?v=' + Date.now(); // cache-buster
 }
 
+
+
+// ... после объявления video
+const popupVideoContainer = document.getElementById('popupVideoContainer');
+const popupVideo = document.getElementById('popupVideo');
+const closePopupVideoBtn = document.getElementById('closePopupVideo');
+let videoTimer = null; // Для таймера автозакрытия
+// ...
+// ... где-то в середине файла
+
+function closePopup() {
+    if (popupVideoContainer.classList.contains('hidden')) return;
+
+    popupVideo.pause();
+    popupVideo.currentTime = 0; // Сбрасываем время
+    popupVideoContainer.classList.add('hidden');
+    clearTimeout(videoTimer);
+}
+
+function playPopupVideo() {
+    // Проверяем, что видео готово к воспроизведению
+    if (popupVideo.readyState < 2) {
+         // Обработка ошибки: если видео не готово или не загрузилось, ничего не показываем.
+         return; 
+    }
+
+    // 1. Показываем контейнер
+    popupVideoContainer.classList.remove('hidden');
+
+    // 2. Запускаем видео
+    popupVideo.play().catch(error => {
+        // Обработка ошибки автовоспроизведения (например, на мобильных устройствах)
+        // При ошибке просто закрываем, не показывая ничего.
+        closePopup(); 
+        console.error("Ошибка воспроизведения видео:", error);
+    });
+
+    // 3. Устанавливаем таймер на 5 секунд
+    videoTimer = setTimeout(closePopup, 5000);
+}
+
+// ...
+// ... после определения btnGallery.onclick
+
+// Обработчик для клика по всей секции Home
+homeSection.addEventListener('click', (e) => {
+    // Убедимся, что клик не был по элементам внутри видео-попапа
+    if (!popupVideoContainer.contains(e.target)) {
+        playPopupVideo();
+    }
+});
+
+// Обработчик для кнопки закрытия
+closePopupVideoBtn.addEventListener('click', closePopup);
+
+// Обработчик ошибки загрузки видео
+popupVideo.addEventListener('error', () => {
+    // Если произошла ошибка при загрузке <source>, 
+    // мы ничего не показываем, так как playPopupVideo уже проверит readyState.
+    // Но для надежности можно скрыть кнопку закрытия, если она торчит.
+    closePopup();
+});
+
+// Дополнительный обработчик: закрытие при окончании видео
+popupVideo.addEventListener('ended', closePopup);
+
+
+
 // --- Инициализация ---
 window.addEventListener('DOMContentLoaded', () => {
   // Принудительно закрываем модалки, если вдруг открыты

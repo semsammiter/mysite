@@ -26,12 +26,26 @@
   <main id="mainContent">   
      
     <div id="homeSection" class="section">
+
+      <div class="ambient-glow glow-top-left"></div>
+      <div class="ambient-glow glow-bottom-right"></div>
+      <div class="ambient-glow glow-center"></div>
+
+
     
     <img src="foto/start.png" alt="Заставка" class="start-image">
     
     <div class="fire-blinking-effect"></div> 
     
     <img src="icon/candle.gif" alt="Горящая свеча" class="candle-gif"> 
+
+    <div id="popupVideoContainer" class="popup-video-container hidden">
+        <video id="popupVideo" muted playsinline preload="auto">
+            <source src="video/video7.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        <button id="closePopupVideo" class="close-popup-btn">✕</button>
+    </div>
 </div>
 
 

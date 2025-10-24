@@ -177,11 +177,114 @@ footer {
     }
 }
 
-/* --- Видео --- */
-#videoSection video {
-  width: 90vw;
-  max-width: 800px;
-  border-radius: 10px;
+
+
+
+.ambient-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(
+        circle,
+        rgba(255, 140, 0, 0.3),
+        rgba(255, 140, 0, 0.05),
+        transparent
+    );
+    filter: blur(40px);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 1;
+    animation: ambient-flicker 4s infinite ease-in-out alternate;
+}
+
+/* Разные позиции бликов */
+.glow-top-left {
+    top: 50px;
+    left: 50px;
+}
+.glow-bottom-right {
+    bottom: 50px;
+    right: 50px;
+}
+.glow-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Анимация мягкого мерцания */
+@keyframes ambient-flicker {
+    0% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 0.5;
+        transform: scale(1.02);
+    }
+}
+
+
+
+/* ВАЖНЫЕ СТИЛИ ДЛЯ АДАПТИВНОГО ВИДЕО-ПОПАПА */
+
+.popup-video-container {
+    /* Фиксированное позиционирование, чтобы окно всегда было видно */
+    position: fixed; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; 
+    
+    /* ОГРАНИЧЕНИЕ РАЗМЕРА ОКНА: */
+    width: 90%; /* Занимает 90% ширины видимой области */
+    max-width: 600px; /* Максимальная ширина на больших экранах */
+    
+    /* Ограничение по высоте, чтобы не выходить за пределы экрана */
+    max-height: 90vh; /* Занимает не более 90% высоты видимой области */
+    
+    background: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border: 3px solid #fff;
+    border-radius: 8px;
+    
+    /* !!! ВАЖНО: Скрытие прокрутки, если видео или контент выйдет за max-height */
+    overflow: hidden; 
+}
+
+.popup-video-container.hidden {
+    display: none;
+}
+
+/* ПОДГОНКА ВИДЕО ПОД РАЗМЕР ОКНА 
+   Используем object-fit: cover, чтобы видео заполняло контейнер,
+   сохраняя пропорции и обрезая лишнее, если нужно.
+*/
+#popupVideo {
+    width: 100%; 
+    height: 100%; /* Занимает всю высоту родителя */
+    
+    /* Гарантирует, что видео сохраняет пропорции и заполняет контейнер */
+    object-fit: contain; 
+    display: block;
+}
+
+.close-popup-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 0 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    z-index: 1001;
 }
 
 /* --- Галерея --- */
