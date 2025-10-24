@@ -1,4 +1,3 @@
-// script.js - обновлённый
 const fallbackImage = 'icon/notfound.jpg';
 
 // Галерея элементы
@@ -143,22 +142,24 @@ playBtn.onclick = () => {
   if (autoSlide) {
     clearInterval(autoSlide);
     autoSlide = null;
-    playBtn.textContent = '▶';
+    playBtn.textContent = '▶'; // HTML-символ для воспроизведения
   } else {
     autoSlide = setInterval(() => showPhoto(current + 1), 3000);
-    playBtn.textContent = '⏸';
+    playBtn.textContent = '❚❚'; // Простой символ паузы (можно использовать '&#9646;&#9646;' или '&#x23F8;')
   }
 };
 
 // fullscreen open/close with history handling
 function openFullscreen() {
-   if (!img.src) return;
+  if (!img.src) return;
   fsImage.src = img.src;
-  fsOverlay.classList.remove('hidden');
-  fsOverlay.style.display = 'flex';
-  // добавим класс анимации к изображению, потом уберём по событию
-  fsImage.classList.remove('fs-enter');       // сброс на всякий
-  // небольшой таймаут, чтобы браузер успел применить display, и анимация сработала
+  
+  // Управление видимостью только через класс 'hidden'
+  fsOverlay.classList.remove('hidden'); 
+  fsOverlay.style.display = 'flex'; // УДАЛЕНО
+
+  // добавим класс анимации
+  fsImage.classList.remove('fs-enter'); 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       fsImage.classList.add('fs-enter');
@@ -170,15 +171,18 @@ function openFullscreen() {
 }
 
 function closeFullscreen(triggeredByPop = false) {
-  // убираем анимационный класс
   fsImage.classList.remove('fs-enter');
   fsOverlay.classList.add('hidden');
-  fsOverlay.style.display = 'none';
+  // fsOverlay.style.display = 'none'; // УДАЛЕНО
   inFullscreen = false;
-  if (!triggeredByPop && history.state && history.state.modal === 'fullscreen') {
-    history.back();
-  }
+  
+ 
 }
+
+// !!! ИСПРАВЛЕНИЕ: Останавливаем всплытие клика на изображении
+fsImage.addEventListener('click', e => {
+    e.stopPropagation(); 
+});
 
 // Закрытие по клику на фон
 fsOverlay.addEventListener('click', e => {
@@ -192,21 +196,20 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Обработаем popstate: если пришёл pop и fullscreen открыт — закроем (triggeredByPop=true)
-window.addEventListener('popstate', (e) => {
-  if (inFullscreen) closeFullscreen(true);
-
-  // остальные модалки уже обрабатываются в основном popstate-обработчике
-});
-
 fsBtn.onclick = openFullscreen;
 fsClose.onclick = () => closeFullscreen(false);
-fsOverlay.addEventListener('click', e => { if (e.target === fsOverlay) closeFullscreen(false); });
+// Удален дублирующийся обработчик fsOverlay.addEventListener('click', ...
 
 // --- Разделы ---
 function showSection(section) {
-  [homeSection, videoSection, gallerySection].forEach(el => el.classList.add('hidden'));
+  // Обновляем ARIA-атрибуты для доступности
+  [homeSection, videoSection, gallerySection].forEach(el => {
+      el.classList.add('hidden');
+      el.setAttribute('aria-hidden', 'true');
+  });
   section.classList.remove('hidden');
+  section.setAttribute('aria-hidden', 'false');
+
   [btnHome, btnVideo, btnGallery, btnShare, btnQR].forEach(btn => btn.classList.remove('active'));
 }
 btnHome.onclick = () => {
@@ -222,28 +225,29 @@ btnVideo.onclick = () => {
 btnGallery.onclick = () => {
   showSection(gallerySection);
   btnGallery.classList.add('active');
-  showPhoto(0);
+  showPhoto(current); // Показываем текущее фото, а не всегда 0
 };
 
 // --- Поделиться (modal) ---
 function openShare() {
-  // Закрываем QR, если открыт
   closeQRModal(false);
   shareMsg.textContent = '';
   shareModal.classList.remove('hidden');
-  // добавляем запись в историю чтобы "назад" закрывал модалку
+  shareModal.setAttribute('aria-hidden', 'false');
   history.pushState({ modal: 'share' }, '', '');
 }
 function closeShareModal(triggeredByPop = false) {
   shareModal.classList.add('hidden');
-  // если закрыли вручную и это был state - откатим его
+  shareModal.setAttribute('aria-hidden', 'true');
   if (!triggeredByPop && history.state && history.state.modal === 'share') {
     history.back();
   }
 }
 btnShare.onclick = openShare;
 closeShare.onclick = () => closeShareModal(false);
-shareModal.addEventListener('click', e => { if (e.target === shareModal) closeShareModal(false); });
+shareModal.addEventListener('click', e => { 
+    if (e.target === shareModal) closeShareModal(false); 
+});
 
 // системный шаринг и копирование
 shareNative.onclick = async () => {
@@ -271,50 +275,47 @@ shareCopy.onclick = async () => {
 function openQRModal() {
   closeShareModal(false);
   qrModal.classList.remove('hidden');
+  qrModal.setAttribute('aria-hidden', 'false');
   history.pushState({ modal: 'qr' }, '', '');
 }
 function closeQRModal(triggeredByPop = false) {
   qrModal.classList.add('hidden');
+  qrModal.setAttribute('aria-hidden', 'true');
   if (!triggeredByPop && history.state && history.state.modal === 'qr') {
     history.back();
   }
 }
 btnQR.onclick = openQRModal;
 closeQR.onclick = () => closeQRModal(false);
-qrModal.addEventListener('click', e => { if (e.target === qrModal) closeQRModal(false); });
+qrModal.addEventListener('click', e => { 
+    if (e.target === qrModal) closeQRModal(false); 
+});
 
 // --- Общая обработка Esc и popstate ---
 // Esc закрывает модалки / fullscreen
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    // при закрытии вручную мы попытаемся откатить историю, если нужно
+    // Esc сам по себе вызовет popstate, если модалка открыта, 
+    // поэтому достаточно просто вызвать закрытие без history.back() внутри.
     closeShareModal(false);
     closeQRModal(false);
-    if (inFullscreen) closeFullscreen(false);
+    if (inFullscreen) closeFullscreen(false); 
   }
 });
 
-// Popstate: когда пользователь нажал "назад" — закрываем модалки и fullscreen,
-// но указываем флаг triggeredByPop=true чтобы не вызывать history.back() снова.
+// Popstate: когда пользователь нажал "назад" — закрываем модалки и fullscreen
 window.addEventListener('popstate', (e) => {
-  // Если state говорит, что модалка открыта — просто синхронизируем (обычно не требуется)
-  // Мы всегда закрываем открытые модалки при popstate:
+  // Если state изменился, и модалка/фулскрин открыты, закрываем их
   if (!shareModal.classList.contains('hidden')) closeShareModal(true);
   if (!qrModal.classList.contains('hidden')) closeQRModal(true);
   if (inFullscreen) closeFullscreen(true);
+  
+  // Если в history.state.modal ничего нет, это просто возврат на предыдущую страницу
+  // (например, при первом нажатии "назад" в браузере, после открытия модалки)
 });
 
 // --- Проверка наличия QR-изображения и скрытие кнопки если нет ---
-function checkQrImage(path) {
-  if (!btnQR) return;
-  btnQR.style.display = 'none'; // по умолчанию скрываем до проверки
-  const im = new Image();
-  im.onload = () => { btnQR.style.display = 'inline-block'; };
-  im.onerror = () => { btnQR.style.display = 'none'; };
-  im.src = path + '?v=' + Date.now(); // cache-buster
-}
-
-// --- Проверка наличия QR-изображения и скрытие кнопки если нет ---
+// Функция присутствует только один раз
 function checkQrImage(path) {
   if (!btnQR) return;
   btnQR.style.display = 'none'; // по умолчанию скрываем
@@ -328,17 +329,15 @@ function checkQrImage(path) {
 window.addEventListener('DOMContentLoaded', () => {
   // Принудительно закрываем модалки, если вдруг открыты
   [shareModal, qrModal, fsOverlay, descPopup].forEach(el => {
-    if (!el) return;
-    el.classList.add('hidden');
-    // Убираем прямое вмешательство в style — позволяем CSS управлять display
+    if (el) el.classList.add('hidden');
   });
 
   // Сбрасываем историю
-  try {
+  if (history.replaceState) {
     history.replaceState({}, '', location.href);
-  } catch (err) {}
+  }
 
-  // Проверяем наличие QR изображения (правильная папка icon/)
+  // Проверяем наличие QR изображения
   checkQrImage('icon/qr.png');
 
   // Устанавливаем стартовое состояние
@@ -348,6 +347,9 @@ window.addEventListener('DOMContentLoaded', () => {
   if (typeof photos !== 'undefined' && photos.length > 0) {
     showPhoto(0);
   } else {
-    [prevBtn, nextBtn, infoBtn].forEach(b => (b.style.display = 'none'));
+    // Скрываем все элементы управления галереи, если нет фото
+    [prevBtn, nextBtn, infoBtn, playBtn, fsBtn].forEach(b => {
+        if(b) b.style.display = 'none';
+    });
   }
 });
