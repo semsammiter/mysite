@@ -1,5 +1,5 @@
 // script.js - обновлённый
-const fallbackImage = 'foto/notfound.jpg';
+const fallbackImage = 'icon/notfound.jpg';
 
 // Галерея элементы
 const img = document.getElementById('photo');
@@ -77,10 +77,17 @@ function showPhoto(index) {
 }
 
 img.onerror = () => {
-  // если картинка не загрузилась — показываем fallback и alt с сообщением
-  img.src = fallbackImage;
-  img.alt = 'Изображение не найдено';
+  const src = img.src;
+  if (src.endsWith('.jpg')) {
+    img.src = src.replace('.jpg', '.JPG');
+  } else if (src.endsWith('.JPG')) {
+    img.src = src.replace('.JPG', '.jpg');
+  } else {
+    img.src = fallbackImage;
+    img.alt = 'Изображение не найдено';
+  }
 };
+
 
 // Навигация
 prevBtn.onclick = () => showPhoto(current - 1);
