@@ -1,34 +1,34 @@
 const photos = [
   {src: 'foto/foto1.jpg', alt: 'foto1', desc: ''},
-  {src: 'foto/foto2.jpg', alt: 'foto2', desc: ''},
-  {src: 'foto/foto3.jpg', alt: 'foto3', desc: ''},
+  {src: 'foto/foto2.JPG', alt: 'foto2', desc: ''}, // Изменено
+  {src: 'foto/foto3.JPG', alt: 'foto3', desc: ''}, // Изменено
   {src: 'foto/foto4.jpg', alt: 'foto4', desc: ''},
-  {src: 'foto/foto5.jpg', alt: 'foto5', desc: ''},
-  {src: 'foto/foto6.jpg', alt: 'foto6', desc: ''},
-  {src: 'foto/foto7.jpg', alt: 'foto7', desc: ''},
-  {src: 'foto/foto8.jpg', alt: 'foto8', desc: ''},
+  {src: 'foto/foto5.JPG', alt: 'foto5', desc: ''}, // Изменено
+  {src: 'foto/foto6.JPG', alt: 'foto6', desc: ''}, // Изменено
+  {src: 'foto/foto7.JPG', alt: 'foto7', desc: ''}, // Изменено
+  {src: 'foto/foto8.JPG', alt: 'foto8', desc: ''}, // Изменено
   {src: 'foto/foto9.jpg', alt: 'foto9', desc: ''},
   {src: 'foto/foto10.jpg', alt: 'foto10', desc: ''},
-  {src: 'foto/foto11.jpg', alt: 'foto11', desc: ''},
-  {src: 'foto/foto12.jpg', alt: 'foto12', desc: ''},
-  {src: 'foto/foto13.jpg', alt: 'foto13', desc: ''},
+  {src: 'foto/foto11.JPG', alt: 'foto11', desc: ''}, // Изменено
+  {src: 'foto/foto12.JPG', alt: 'foto12', desc: ''}, // Изменено
+  {src: 'foto/foto13.JPG', alt: 'foto13', desc: ''}, // Изменено
   {src: 'foto/foto14.jpg', alt: 'foto14', desc: ''},
-  {src: 'foto/foto141.jpg', alt: 'foto14', desc: ''},
+  {src: 'foto/foto141.JPG', alt: 'foto14', desc: ''}, // Изменено
   {src: 'foto/foto15.jpg', alt: 'foto15', desc: ''},
   {src: 'foto/foto16.jpg', alt: 'foto16', desc: ''},
-  {src: 'foto/foto161.jpg', alt: 'foto16', desc: ''},
+  {src: 'foto/foto161.JPG', alt: 'foto16', desc: ''}, // Изменено
   {src: 'foto/foto17.jpg', alt: 'foto17', desc: ''},
-  {src: 'foto/foto18.jpg', alt: 'foto18', desc: ''},
-  {src: 'foto/foto19.jpg', alt: 'foto19', desc: ''},
-  {src: 'foto/foto20.jpg', alt: 'foto20', desc: ''},
-  {src: 'foto/foto21.jpg', alt: 'foto21', desc: ''},
-  {src: 'foto/foto212.jpg', alt: 'foto21', desc: ''},
-  {src: 'foto/foto22.jpg', alt: 'foto22', desc: ''},
-  {src: 'foto/foto221.jpg', alt: 'foto22', desc: ''},
-  {src: 'foto/foto222.jpg', alt: 'foto22', desc: ''},
-  {src: 'foto/foto23.jpg', alt: 'foto23', desc: ''},
-  {src: 'foto/foto24.jpg', alt: 'foto24', desc: ''},
-  {src: 'foto/foto25.jpg', alt: 'foto25', desc: ''},
+  {src: 'foto/foto18.JPG', alt: 'foto18', desc: ''}, // Изменено
+  {src: 'foto/foto19.JPG', alt: 'foto19', desc: ''}, // Изменено
+  {src: 'foto/foto20.JPG', alt: 'foto20', desc: ''}, // Изменено
+  {src: 'foto/foto21.JPG', alt: 'foto21', desc: ''}, // Изменено
+  {src: 'foto/foto212.JPG', alt: 'foto21', desc: ''}, // Изменено
+  {src: 'foto/foto22.JPG', alt: 'foto22', desc: ''}, // Изменено
+  {src: 'foto/foto221.JPG', alt: 'foto22', desc: ''}, // Изменено
+  {src: 'foto/foto222.JPG', alt: 'foto22', desc: ''}, // Изменено
+  {src: 'foto/foto23.JPG', alt: 'foto23', desc: ''}, // Изменено
+  {src: 'foto/foto24.JPG', alt: 'foto24', desc: ''}, // Изменено
+  {src: 'foto/foto25.JPG', alt: 'foto25', desc: ''}, // Изменено
   {src: 'foto/foto251.jpg', alt: 'foto25', desc: ''},
   {src: 'foto/foto252.jpg', alt: 'foto25', desc: ''},
   {src: 'foto/foto26.jpg', alt: 'foto26', desc: ''},
