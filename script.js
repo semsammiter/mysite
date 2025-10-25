@@ -51,43 +51,7 @@ function updateButtons() {
   nextBtn.style.display = current < photos.length - 1 ? 'block' : 'none';
 }
 
-// function showPhoto(index) {
-//   if (!photos || photos.length === 0) {
-//     img.src = fallbackImage;
-//     img.alt = 'Нет фото';
-//     return;
-//   }
-
-//   current = (index + photos.length) % photos.length;
-//   const photo = photos[current];
-
-//   // затемнение фона и плавное появление
-//   gallery.classList.add('fade-bg');
-//   img.classList.add('fade-out');
-
-//   setTimeout(() => {
-//     img.src = photo.src;
-//     img.alt = photo.alt || '';
-//     img.classList.remove('fade-out');
-//     gallery.classList.remove('fade-bg');
-//     updateButtons();
-//     infoBtn.style.display = (photo.desc && photo.desc.trim() !== '') ? 'block' : 'none';
-//   }, 300);
-// }
-
-// img.onerror = () => {
-//   const src = img.src;
-//   if (src.endsWith('.jpg')) {
-//     img.src = src.replace('.jpg', '.JPG');
-//   } else if (src.endsWith('.JPG')) {
-//     img.src = src.replace('.JPG', '.jpg');
-//   } else {
-//     img.src = fallbackImage;
-//     img.alt = 'Изображение не найдено';
-//   }
-// };
-
-// --- Галерея: показ фото (ИСПРАВЛЕННАЯ ВЕРСИЯ) ---
+// --- Галерея: показ фото  ---
 function showPhoto(index) {
     if (!photos || photos.length === 0) {
         img.src = fallbackImage;
@@ -172,10 +136,6 @@ function showPhoto(index) {
     };
 }
 
-// УДАЛИТЕ эту часть, она дублируется и мешает логике:
-// img.onerror = () => { ... };
-
-
 // Навигация
 prevBtn.onclick = () => showPhoto(current - 1);
 nextBtn.onclick = () => showPhoto(current + 1);
@@ -244,7 +204,7 @@ function openFullscreen() {
   
   // Управление видимостью только через класс 'hidden'
   fsOverlay.classList.remove('hidden'); 
-  fsOverlay.style.display = 'flex'; // УДАЛЕНО
+  fsOverlay.style.display = 'flex'; 
 
   // добавим класс анимации
   fsImage.classList.remove('fs-enter'); 
@@ -261,13 +221,13 @@ function openFullscreen() {
 function closeFullscreen(triggeredByPop = false) {
   fsImage.classList.remove('fs-enter');
   fsOverlay.classList.add('hidden');
-  // fsOverlay.style.display = 'none'; // УДАЛЕНО
+  // fsOverlay.style.display = 'none'; 
   inFullscreen = false;
   
  
 }
 
-// !!! ИСПРАВЛЕНИЕ: Останавливаем всплытие клика на изображении
+//  Останавливаем всплытие клика на изображении
 fsImage.addEventListener('click', e => {
     e.stopPropagation(); 
 });
@@ -286,7 +246,6 @@ document.addEventListener('keydown', e => {
 
 fsBtn.onclick = openFullscreen;
 fsClose.onclick = () => closeFullscreen(false);
-// Удален дублирующийся обработчик fsOverlay.addEventListener('click', ...
 
 // --- Разделы ---
 function showSection(section) {
@@ -313,7 +272,7 @@ btnVideo.onclick = () => {
 btnGallery.onclick = () => {
   showSection(gallerySection);
   btnGallery.classList.add('active');
-  showPhoto(current); // Показываем текущее фото, а не всегда 0
+  showPhoto(current); // Показываем текущее фото
 };
 
 // --- Поделиться (modal) ---
@@ -382,9 +341,7 @@ qrModal.addEventListener('click', e => {
 // --- Общая обработка Esc и popstate ---
 // Esc закрывает модалки / fullscreen
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    // Esc сам по себе вызовет popstate, если модалка открыта, 
-    // поэтому достаточно просто вызвать закрытие без history.back() внутри.
+  if (e.key === 'Escape') {   
     closeShareModal(false);
     closeQRModal(false);
     if (inFullscreen) closeFullscreen(false); 
@@ -396,14 +353,10 @@ window.addEventListener('popstate', (e) => {
   // Если state изменился, и модалка/фулскрин открыты, закрываем их
   if (!shareModal.classList.contains('hidden')) closeShareModal(true);
   if (!qrModal.classList.contains('hidden')) closeQRModal(true);
-  if (inFullscreen) closeFullscreen(true);
-  
-  // Если в history.state.modal ничего нет, это просто возврат на предыдущую страницу
-  // (например, при первом нажатии "назад" в браузере, после открытия модалки)
+  if (inFullscreen) closeFullscreen(true);  
 });
 
 // --- Проверка наличия QR-изображения и скрытие кнопки если нет ---
-// Функция присутствует только один раз
 function checkQrImage(path) {
   if (!btnQR) return;
   btnQR.style.display = 'none'; // по умолчанию скрываем
@@ -413,15 +366,11 @@ function checkQrImage(path) {
   im.src = path + '?v=' + Date.now(); // cache-buster
 }
 
-
-
 // ... после объявления video
 const popupVideoContainer = document.getElementById('popupVideoContainer');
 const popupVideo = document.getElementById('popupVideo');
 const closePopupVideoBtn = document.getElementById('closePopupVideo');
 let videoTimer = null; // Для таймера автозакрытия
-// ...
-// ... где-то в середине файла
 
 function closePopup() {
     if (popupVideoContainer.classList.contains('hidden')) return;
@@ -454,9 +403,6 @@ function playPopupVideo() {
     videoTimer = setTimeout(closePopup, 5000);
 }
 
-// ...
-// ... после определения btnGallery.onclick
-
 // Обработчик для клика по всей секции Home
 homeSection.addEventListener('click', (e) => {
     // Убедимся, что клик не был по элементам внутри видео-попапа
@@ -469,10 +415,7 @@ homeSection.addEventListener('click', (e) => {
 closePopupVideoBtn.addEventListener('click', closePopup);
 
 // Обработчик ошибки загрузки видео
-popupVideo.addEventListener('error', () => {
-    // Если произошла ошибка при загрузке <source>, 
-    // мы ничего не показываем, так как playPopupVideo уже проверит readyState.
-    // Но для надежности можно скрыть кнопку закрытия, если она торчит.
+popupVideo.addEventListener('error', () => {    
     closePopup();
 });
 
