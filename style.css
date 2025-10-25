@@ -563,3 +563,9 @@ img.fade-out { opacity: 0; }
   border-radius: 8px;
 }
 
+#introVideo {
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+}
