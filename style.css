@@ -1,3 +1,10 @@
+*, *::before, *::after {
+    box-sizing: border-box; /* ГЛАВНОЕ ИСПРАВЛЕНИЕ: включает padding и border в общую ширину/высоту */
+}
+html, body {
+    height: 100%; /* Гарантируем, что body занимает всю высоту */
+}
+
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
@@ -15,14 +22,32 @@ header {
   background: #222;
   color: #fff;
   text-align: center;
-  padding: 10px;
+  padding: 10px 15px;
   z-index: 100;
+}
+
+header h1 {
+    /* Сброс стандартных стилей, которые могут мешать, и обеспечение переноса */
+    margin: 0; /* Убираем лишние отступы */
+    padding: 0;
+    width: 100%; /* Занимает всю доступную ширину контейнера header */
+    
+    /* 1. Обеспечение переноса длинных слов */
+    word-wrap: break-word; /* Для старых браузеров */
+    overflow-wrap: break-word; /* Современный стандарт */
+    white-space: normal; /* Гарантируем, что текст не сжимается в одну строку */
+
+    /* 2. Адаптивный размер шрифта */
+    font-size: 1.4rem; /* Размер по умолчанию для десктопа/планшета */
 }
 
 /* --- Основная область --- */
 main {
-  padding-top: 70px;
-  padding-bottom: 80px;
+  /* padding-top: 70px;
+  padding-bottom: 80px; */
+  padding-top: 80px;
+  padding-bottom: 70px;
+  box-sizing: border-box;
   background: #111;
   display: flex;
   justify-content: center;
@@ -246,10 +271,10 @@ footer {
     
     /* Ограничение по высоте, чтобы не выходить за пределы экрана */
     max-height: 90vh; /* Занимает не более 90% высоты видимой области */
-    
+    height: 90vh;
     background: #000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    border: 3px solid #fff;
+    /* border: 3px solid #fff; */
     border-radius: 8px;
     
     /* !!! ВАЖНО: Скрытие прокрутки, если видео или контент выйдет за max-height */
@@ -269,7 +294,7 @@ footer {
     height: 100%; /* Занимает всю высоту родителя */
     
     /* Гарантирует, что видео сохраняет пропорции и заполняет контейнер */
-    object-fit: contain; 
+    object-fit: cover; 
     display: block;
 }
 

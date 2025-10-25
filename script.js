@@ -51,41 +51,129 @@ function updateButtons() {
   nextBtn.style.display = current < photos.length - 1 ? 'block' : 'none';
 }
 
+// function showPhoto(index) {
+//   if (!photos || photos.length === 0) {
+//     img.src = fallbackImage;
+//     img.alt = 'Нет фото';
+//     return;
+//   }
+
+//   current = (index + photos.length) % photos.length;
+//   const photo = photos[current];
+
+//   // затемнение фона и плавное появление
+//   gallery.classList.add('fade-bg');
+//   img.classList.add('fade-out');
+
+//   setTimeout(() => {
+//     img.src = photo.src;
+//     img.alt = photo.alt || '';
+//     img.classList.remove('fade-out');
+//     gallery.classList.remove('fade-bg');
+//     updateButtons();
+//     infoBtn.style.display = (photo.desc && photo.desc.trim() !== '') ? 'block' : 'none';
+//   }, 300);
+// }
+
+// img.onerror = () => {
+//   const src = img.src;
+//   if (src.endsWith('.jpg')) {
+//     img.src = src.replace('.jpg', '.JPG');
+//   } else if (src.endsWith('.JPG')) {
+//     img.src = src.replace('.JPG', '.jpg');
+//   } else {
+//     img.src = fallbackImage;
+//     img.alt = 'Изображение не найдено';
+//   }
+// };
+
+// --- Галерея: показ фото (ИСПРАВЛЕННАЯ ВЕРСИЯ) ---
 function showPhoto(index) {
-  if (!photos || photos.length === 0) {
-    img.src = fallbackImage;
-    img.alt = 'Нет фото';
-    return;
-  }
+    if (!photos || photos.length === 0) {
+        img.src = fallbackImage;
+        img.alt = 'Нет фото';
+        return;
+    }
 
-  current = (index + photos.length) % photos.length;
-  const photo = photos[current];
+    current = (index + photos.length) % photos.length;
+    const photo = photos[current];
+    const newSrc = photo.src;
 
-  // затемнение фона и плавное появление
-  gallery.classList.add('fade-bg');
-  img.classList.add('fade-out');
+    // 1. Создаем временное изображение для предзагрузки
+    const tempImage = new Image();
+    
+    // Сначала инициируем анимацию исчезновения старого изображения
+    img.classList.add('fade-out');
+    gallery.classList.add('fade-bg');
 
-  setTimeout(() => {
-    img.src = photo.src;
-    img.alt = photo.alt || '';
-    img.classList.remove('fade-out');
-    gallery.classList.remove('fade-bg');
-    updateButtons();
-    infoBtn.style.display = (photo.desc && photo.desc.trim() !== '') ? 'block' : 'none';
-  }, 300);
+    // 2. Начинаем загрузку нового изображения
+    tempImage.src = newSrc;
+
+    // 3. Обработчик успешной загрузки
+    tempImage.onload = () => {
+        // Мы используем короткий таймер 50 мс, чтобы анимация fade-out успела начаться,
+        // прежде чем мы "покажем" новое изображение.
+        setTimeout(() => {
+            img.src = newSrc; // Меняем src только после загрузки
+            img.alt = photo.alt || '';
+            
+            // Запускаем анимацию появления
+            img.classList.remove('fade-out'); 
+            gallery.classList.remove('fade-bg');
+            
+            updateButtons();
+            infoBtn.style.display = (photo.desc && photo.desc.trim() !== '') ? 'block' : 'none';
+        }, 50); // Уменьшили таймер до 50 мс
+    };
+
+    // 4. Обработчик ошибки загрузки (оставляем вашу логику с .jpg/.JPG)
+    tempImage.onerror = () => {
+        // Если первое имя файла не сработало, попробуем альтернативный регистр
+        const alternateSrc = newSrc.endsWith('.jpg') ? 
+                             newSrc.replace('.jpg', '.JPG') : 
+                             newSrc.endsWith('.JPG') ? 
+                             newSrc.replace('.JPG', '.jpg') : 
+                             null;
+        
+        if (alternateSrc && alternateSrc !== newSrc) {
+            // Если есть альтернативный вариант, пробуем его загрузить
+            const retryImage = new Image();
+            retryImage.onload = () => {
+                // Если повторная загрузка удачна, показываем
+                setTimeout(() => {
+                    img.src = alternateSrc;
+                    img.alt = photo.alt || '';
+                    img.classList.remove('fade-out');
+                    gallery.classList.remove('fade-bg');
+                    updateButtons();
+                    infoBtn.style.display = (photo.desc && photo.desc.trim() !== '') ? 'block' : 'none';
+                }, 50);
+            };
+            retryImage.onerror = () => {
+                // Если и повторная загрузка не удалась
+                img.src = fallbackImage;
+                img.alt = 'Изображение не найдено';
+                img.classList.remove('fade-out');
+                gallery.classList.remove('fade-bg');
+                updateButtons();
+                infoBtn.style.display = 'none';
+            };
+            retryImage.src = alternateSrc;
+
+        } else {
+             // Если нет альтернативы, показываем заглушку
+            img.src = fallbackImage;
+            img.alt = 'Изображение не найдено';
+            img.classList.remove('fade-out');
+            gallery.classList.remove('fade-bg');
+            updateButtons();
+            infoBtn.style.display = 'none';
+        }
+    };
 }
 
-img.onerror = () => {
-  const src = img.src;
-  if (src.endsWith('.jpg')) {
-    img.src = src.replace('.jpg', '.JPG');
-  } else if (src.endsWith('.JPG')) {
-    img.src = src.replace('.JPG', '.jpg');
-  } else {
-    img.src = fallbackImage;
-    img.alt = 'Изображение не найдено';
-  }
-};
+// УДАЛИТЕ эту часть, она дублируется и мешает логике:
+// img.onerror = () => { ... };
 
 
 // Навигация
